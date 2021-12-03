@@ -15,7 +15,7 @@ from rest_framework.parsers import JSONParser
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-def task_list(request):
+def tasks(request):
 
     
     if request.method == 'GET':
