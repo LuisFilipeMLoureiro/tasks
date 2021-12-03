@@ -1,7 +1,7 @@
-from django.urls import path
-
-from . import views
+from django.conf.urls import url 
+from tasks import views 
+ 
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    url(r'^api/tasks$', views.tasks_list),
 ]
