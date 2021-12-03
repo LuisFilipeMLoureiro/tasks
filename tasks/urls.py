@@ -3,5 +3,5 @@ from tasks import views
  
 
 urlpatterns = [
-    url(r'^api/tasks$', views.tasks_list),
+    url(r'^requests/tasks$', views.tasks_list),
 ]
