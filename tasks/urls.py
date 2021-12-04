@@ -1,7 +1,7 @@
-from django.conf.urls import url 
-from tasks import views 
-from django.urls import path
- 
+from django.urls import include, path
+from rest_framework import routers
+from . import views
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('tasks/<int:pk>', views.delete_task, name="delte"),
