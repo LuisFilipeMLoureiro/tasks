@@ -11,28 +11,31 @@ from .serializers import TaskSerializer
 from django.core import serializers
 
 #verbos https
-@api_view(['GET', 'POST'])
-def GET_POST(request):
 
-    if request.method == 'GET':
-        get = Task.objects.all()
-        response = serializers.serialize("json", get)
-        return HttpResponse(response, content_type="application/json", status=status.HTTP_200_OK)
+@api_view(['GET'])
+def get_all_tasks(request):
+    all_tasks = Task.objects.all()
+    json_response = serializers.serialize("json", all_tasks)
+    return HttpResponse(json_response, content_type="application/json", status=status.HTTP_200_OK)
 
-    else:
-        if request.method == 'POST':
-            response_post = TaskSerializer(data=request.data)
-            if response_post.is_valid():
-                response_post.save()
-                return JsonResponse(response_post.data, status=status.HTTP_201_CREATED)
-            return JsonResponse(response_post.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def post_tasks(request):
+    serializer = TaskSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        # json_response = serializers.serialize("json", serializer)
+        return JsonResponse(serializer.data, status=201)
+    return JsonResponse(serializer.errors, status=400)
 
 @api_view(['DELETE'])
-def DELETE(pk):
+def delete_task(request, pk):
+    try:
+        task = Task.objects.get(pk=pk)
+        task.delete()
+    except Task.DoesNotExist:
+       return Response(status=status.HTTP_404_NOT_FOUND)
 
-    response_get = Task.objects.get(pk=pk)
-    response_get.delete()
-    return JsonResponse({"deletado!"}, status=status.HTTP_200_OK)
+    return JsonResponse({"message": "Task deletada com sucesso"}, status=status.HTTP_200_OK)
 
 
 
