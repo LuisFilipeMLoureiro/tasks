@@ -14,7 +14,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the tasks index.")
 
 @api_view(['GET'])
-def get():
+def get(request):
     response_get = Task.objects.all()
     json_get = serializers.serialize("json", response_get)
     return HttpResponse(json_get, content_type="application/json", status=status.HTTP_200_OK)
@@ -28,7 +28,7 @@ def post(request):
     return JsonResponse(serializer.errors, status=400)
 
 @api_view(['DELETE'])
-def delete(pk):
+def delete_task(request,pk):
     try:
         get = Task.objects.get(pk=pk)
         get.delete()
