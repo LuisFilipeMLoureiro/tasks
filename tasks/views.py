@@ -14,28 +14,26 @@ def index(request):
     return HttpResponse("Hello, world. You're at the tasks index.")
 
 @api_view(['GET'])
-def get_all_tasks(request):
-    all_tasks = Task.objects.all()
-    json_response = serializers.serialize("json", all_tasks)
-    return HttpResponse(json_response, content_type="application/json", status=status.HTTP_200_OK)
+def get():
+    response_get = Task.objects.all()
+    json_get = serializers.serialize("json", response_get)
+    return HttpResponse(json_get, content_type="application/json", status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-def post_tasks(request):
+def post(request):
     serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        # json_response = serializers.serialize("json", serializer)
         return JsonResponse(serializer.data, status=201)
     return JsonResponse(serializer.errors, status=400)
 
 @api_view(['DELETE'])
-def delete_task(request, pk):
+def delete(pk):
     try:
-        task = Task.objects.get(pk=pk)
-        task.delete()
+        get = Task.objects.get(pk=pk)
+        get.delete()
     except Task.DoesNotExist:
        return Response(status=status.HTTP_404_NOT_FOUND)
-
     return JsonResponse({"message": "Task deletada com sucesso"}, status=status.HTTP_200_OK)
 
 
